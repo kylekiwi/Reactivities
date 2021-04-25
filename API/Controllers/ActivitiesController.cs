@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Activities;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,21 +11,17 @@ namespace API.Controllers
 {
 	public class ActivitiesController : BasicApiController
 	{
-		private readonly DataContext _context;
-		public ActivitiesController(DataContext context)
+
+		[HttpGet]
+		public async Task<ActionResult<List<Activity>>> GetActivities()
 		{
-			_context = context;
+			return await Mediator.Send(new List.Query());
 		}
-		
-        [HttpGet]
-        public async Task<ActionResult<List<Activity>>> GetActivities()
-        {
-            return await _context.Activities.ToListAsync();
-        }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Activity>> GetActivity(Guid id)
-        {
-            return await _context.Activities.FindAsync(id);
-        }
+
+		[HttpGet("{id}")]
+		public async Task<ActionResult<Activity>> GetActivity(Guid id)
+		{
+			return Ok();
+		}
 	}
 }

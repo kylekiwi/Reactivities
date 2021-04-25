@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using MediatR;
+using Application.Activities;
 
 namespace API
 {
@@ -29,7 +31,6 @@ namespace API
 			_config = config;
 		}
 
-
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
@@ -43,11 +44,16 @@ namespace API
 			{
 				opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
 			});
-			services.AddCors(opt=>{
-				opt.AddPolicy("CorsPolicy", policy=>{
+			services.AddCors(opt =>
+			{
+				opt.AddPolicy("CorsPolicy", policy =>
+				{
 					policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
 				});
 			});
+			//This tell our app where to go and find or tell mediator where to find our handlers.
+			//cause we are in diffrent projects.
+			services.AddMediatR(typeof(List.Handler).Assembly);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
