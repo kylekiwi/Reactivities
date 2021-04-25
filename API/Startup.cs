@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using MediatR;
 using Application.Activities;
+using Application.Core;
 
 namespace API
 {
@@ -54,6 +55,7 @@ namespace API
 			//This tell our app where to go and find or tell mediator where to find our handlers.
 			//cause we are in diffrent projects.
 			services.AddMediatR(typeof(List.Handler).Assembly);
+			services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
