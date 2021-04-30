@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { resolve } from 'node:path';
+// import { resolve } from 'node:path';
 import { Activity } from '../models/activity';
 
 const sleep = (delay: number) =>{
@@ -36,11 +36,6 @@ const Activities = {
 	delete: (id: string) => requests.del<void>(`/activities/${id}`)
 	
 };
-
-function a()
-{
-	return requests.get<Activity[]>('/activities');
-}
 
 const agent = {
 	Activities
