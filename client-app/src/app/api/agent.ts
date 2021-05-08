@@ -22,7 +22,7 @@ axios.interceptors.response.use(async response => {
       if(typeof data === 'string'){
         toast.error('bad request');
       }
-      if(config.method='GET' && data.errors.hasOwnProperty('id')){
+      if(config.method==='GET' && data.errors.hasOwnProperty('id')){
         history.push('not-found');
       }
       if(data.errors){
