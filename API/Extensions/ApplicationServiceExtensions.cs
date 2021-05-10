@@ -1,5 +1,7 @@
 using Application.Activities;
 using Application.Core;
+using Application.Inferfaces;
+using Infrastructure.Security;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +35,7 @@ namespace API.Extensions
 			//cause we are in diffrent projects.
 			services.AddMediatR(typeof(List.Handler).Assembly);
 			services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+			services.AddScoped<IUserAccessor, UserAccessor>();
 			
 			return services;
 			
