@@ -39,7 +39,7 @@ namespace Infrastructure.Photos
         }
         return new PhotoUploadResult
         {
-          publicId = uploadResult.PublicId,
+          PublicId = uploadResult.PublicId,
           Url = uploadResult.SecureUrl.ToString()
         };
       }
