@@ -5,7 +5,7 @@ using Domain;
 
 namespace Application.Core
 {
-  public class MappingProfiles : Profile
+  public class MappingProfiles : Profile //Profile of Automapper
   {
     public MappingProfiles()
     {
@@ -17,6 +17,9 @@ namespace Application.Core
         .ForMember(d=>d.DisplayName, o=>o.MapFrom(s=>s.AppUser.DisplayName))
         .ForMember(d=>d.Username, o=>o.MapFrom(s=>s.AppUser.UserName))
         .ForMember(d=>d.Bio, o=>o.MapFrom(s=>s.AppUser.Bio));
+      CreateMap<AppUser, Profiles.Profile>()
+        .ForMember(d => d.Image, o => o.MapFrom(s=>s.Photos.FirstOrDefault(x=>x.IsMain).Url));
+      
     }
   }
 }

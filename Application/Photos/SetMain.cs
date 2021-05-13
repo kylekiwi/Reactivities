@@ -28,7 +28,7 @@ namespace Application.Photos
       public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
       {
         var user = await _context.Users.Include(p=>p.Photos)
-          .FirstOrDefaultAsync(x=>x.UserName == _userAccessor.GetUsername());0
+          .FirstOrDefaultAsync(x=>x.UserName == _userAccessor.GetUsername());
         if(user == null) return null;
 
         var photo = user.Photos.FirstOrDefault(x=>x.Id == request.Id);
@@ -41,7 +41,5 @@ namespace Application.Photos
         return Result<Unit>.Failure("Problem setting main photo");
       }
     }
-
-
   }
 }
