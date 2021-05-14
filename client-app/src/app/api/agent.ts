@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
-// import { resolve } from 'node:path';
 import { Activity, ActivityFormValues } from '../models/activity';
 import { Photo, Profile } from '../models/profile';
 import { User, UserFormValues } from '../models/user';
