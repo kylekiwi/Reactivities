@@ -1,6 +1,6 @@
 using System.Linq;
 using Application.Activities;
-using Application.Comment;
+using Application.Comments;
 using AutoMapper;
 using Domain;
 
