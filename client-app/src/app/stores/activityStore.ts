@@ -172,6 +172,7 @@ export default class ActivityStore {
       runInAction(() => (this.loading = false));
     }
   };
+
   cancelActivityToggle = async () => {
     this.loading = true;
     try {
@@ -185,5 +186,9 @@ export default class ActivityStore {
     } finally {
       runInAction(()=>this.loading=false);
     }
+  }
+  
+  clearSelectedActivity = () => {
+    this.selectedActivity = undefined;
   }
 }
