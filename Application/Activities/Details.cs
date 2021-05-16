@@ -2,9 +2,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
+using Application.Inferfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -22,8 +22,10 @@ namespace Application.Activities
     {
       public DataContext _context { get; set; }
       private readonly IMapper _mapper;
-      public Handler(DataContext context, IMapper mapper)
+      private readonly IUserAccessor _userAccessor;
+      public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
       {
+        _userAccessor = userAccessor;
         _mapper = mapper;
         _context = context;
       }
@@ -32,7 +34,8 @@ namespace Application.Activities
         // return await _context.Activities.FindAsync(request.Id);
         var activity = await _context.Activities
           // .FindAsync(request.Id);
-          .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
+          .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, 
+            new {currentUsername = _userAccessor.GetUsername()})
           .FirstOrDefaultAsync(x => x.Id == request.Id);
         // return Result<Activity>.Success(activity);
         return Result<ActivityDto>.Success(activity);
