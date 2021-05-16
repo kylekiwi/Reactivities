@@ -4,6 +4,7 @@ import { Activity, ActivityFormValues } from "../models/activity";
 import { format } from "date-fns";
 import { store } from "./store";
 import { Profile } from "../models/profile";
+import { Pagination, PagingParams } from "../models/pagination";
 
 export default class ActivityStore {
   // activities: Activity[] = [];
@@ -12,9 +13,22 @@ export default class ActivityStore {
   editMode = false;
   loading = false;
   loadingInitial = false;
+  pagination: Pagination | null = null;
+  pagingParams = new PagingParams();
 
   constructor() {
     makeAutoObservable(this);
+  }
+  
+  setPagingParams = (pagingParams: PagingParams) => {
+    this.pagingParams = pagingParams;
+  }
+
+  get axiosParams() {
+    const params = new URLSearchParams();
+    params.append('pageNumber', this.pagingParams.pageNumber.toString());
+    params.append('pageSize', this.pagingParams.pageSize.toString());
+    return params;
   }
 
   get activitiesByDate() {
@@ -39,16 +53,21 @@ export default class ActivityStore {
   loadActivities = async () => {
     this.loadingInitial = true;
     try {
-      const activities = await agent.Activities.list();
-      activities.forEach((act) => {
+      const result = await agent.Activities.list(this.axiosParams);
+      result.data.forEach((act) => {
         this.setActivity(act);
       });
+      this.setPagination(result.pagination);
       this.setLoadingInitial(false);
     } catch (error) {
       console.log(error);
       this.setLoadingInitial(false);
     }
   };
+  
+  setPagination = (pagination: Pagination) => {
+    this.pagination = pagination
+  }
 
   loadActivity = async (id: string) => {
     let activity = this.getActivity(id);
