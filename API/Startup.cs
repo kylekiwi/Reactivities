@@ -64,6 +64,10 @@ namespace API
 			}
 			// app.UseHttpsRedirection();
 			app.UseRouting();
+			
+      app.UseDefaultFiles(); //find www~ index.html
+      app.UseStaticFiles(); //anything in www~ folder
+
 			app.UseCors("CorsPolicy");
 			app.UseAuthentication();
 			app.UseAuthorization();
@@ -71,6 +75,7 @@ namespace API
 			{
 				endpoints.MapControllers();
 				endpoints.MapHub<ChatHub>("/chat");
+        endpoints.MapFallbackToController("Index", "Fallback");
 			});
 		}
 	}
