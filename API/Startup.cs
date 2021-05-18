@@ -56,12 +56,35 @@ namespace API
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
       app.UseMiddleware<ExceptionMiddleware>();
+
+      app.UseXContentTypeOptions();
+      app.UseReferrerPolicy(opt => opt.NoReferrer());
+      app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+      app.UseXfo(opt => opt.Deny());
+      // app.UseCspReportOnly(opt => opt //just for check on a web browser
+      app.UseCsp(opt => opt
+        .BlockAllMixedContent()
+        .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com"))
+        .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
+        .FormActions(s => s.Self())
+        .FrameAncestors(s => s.Self())
+        .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com"))
+        .ScriptSources(s => s.Self().CustomSources("sha256-Q6WIwgZwDpK0dO1QMQAm37X9n4PeDZeZ1WjKSLxD/zA="))
+      );
+
+
 			if (env.IsDevelopment())
 			{
 				// app.UseDeveloperExceptionPage();
 				app.UseSwagger();
 				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
-			}
+			} else {
+        // app.UseHsts(); //not work with heroku
+        app.Use(async (context, next) => {
+          context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
+          await next.Invoke();
+        });
+      }
 			// app.UseHttpsRedirection();
 			app.UseRouting();
 			
